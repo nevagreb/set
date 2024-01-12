@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		638B19022B4C1A0000125053 /* Shapes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638B19012B4C1A0000125053 /* Shapes.swift */; };
 		63DD27812B331B2700F2D595 /* SetApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DD27802B331B2700F2D595 /* SetApp.swift */; };
 		63DD27832B331B2700F2D595 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DD27822B331B2700F2D595 /* ContentView.swift */; };
 		63DD27852B331B2800F2D595 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 63DD27842B331B2800F2D595 /* Assets.xcassets */; };
@@ -14,6 +15,8 @@
 		63DD27932B331B2800F2D595 /* SetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DD27922B331B2800F2D595 /* SetTests.swift */; };
 		63DD279D2B331B2800F2D595 /* SetUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DD279C2B331B2800F2D595 /* SetUITests.swift */; };
 		63DD279F2B331B2800F2D595 /* SetUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DD279E2B331B2800F2D595 /* SetUITestsLaunchTests.swift */; };
+		63DD27AC2B332D2C00F2D595 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DD27AB2B332D2C00F2D595 /* Model.swift */; };
+		63DD27AE2B332D4F00F2D595 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DD27AD2B332D4F00F2D595 /* ViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +37,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		638B19012B4C1A0000125053 /* Shapes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shapes.swift; sourceTree = "<group>"; };
 		63DD277D2B331B2700F2D595 /* Set.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Set.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		63DD27802B331B2700F2D595 /* SetApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetApp.swift; sourceTree = "<group>"; };
 		63DD27822B331B2700F2D595 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -45,6 +49,8 @@
 		63DD27982B331B2800F2D595 /* SetUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SetUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		63DD279C2B331B2800F2D595 /* SetUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetUITests.swift; sourceTree = "<group>"; };
 		63DD279E2B331B2800F2D595 /* SetUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		63DD27AB2B332D2C00F2D595 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		63DD27AD2B332D4F00F2D595 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +81,7 @@
 		63DD27742B331B2700F2D595 = {
 			isa = PBXGroup;
 			children = (
+				638B19012B4C1A0000125053 /* Shapes.swift */,
 				63DD277F2B331B2700F2D595 /* Set */,
 				63DD27912B331B2800F2D595 /* SetTests */,
 				63DD279B2B331B2800F2D595 /* SetUITests */,
@@ -97,6 +104,8 @@
 			children = (
 				63DD27802B331B2700F2D595 /* SetApp.swift */,
 				63DD27822B331B2700F2D595 /* ContentView.swift */,
+				63DD27AB2B332D2C00F2D595 /* Model.swift */,
+				63DD27AD2B332D4F00F2D595 /* ViewModel.swift */,
 				63DD27842B331B2800F2D595 /* Assets.xcassets */,
 				63DD27862B331B2800F2D595 /* Set.entitlements */,
 				63DD27872B331B2800F2D595 /* Preview Content */,
@@ -259,7 +268,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				63DD27AC2B332D2C00F2D595 /* Model.swift in Sources */,
 				63DD27832B331B2700F2D595 /* ContentView.swift in Sources */,
+				638B19022B4C1A0000125053 /* Shapes.swift in Sources */,
+				63DD27AE2B332D4F00F2D595 /* ViewModel.swift in Sources */,
 				63DD27812B331B2700F2D595 /* SetApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
