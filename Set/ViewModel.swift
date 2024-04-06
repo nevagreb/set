@@ -8,7 +8,7 @@
 import Foundation
 
 class SetGame: ObservableObject {
-    @Published var viewModel = Model()
+    @Published var viewModel: Model
     
     var countOfGettedSets: Int {
         viewModel.countOfGettedSets
@@ -18,16 +18,48 @@ class SetGame: ObservableObject {
         viewModel.cards
     }
     
+    var showingCards: [Model.Card] {
+        viewModel.showingCards
+    }
+    
+    var discardPile: [Model.Card] {
+        viewModel.discardPile
+    }
+    
     var countOfShowingCards: Int {
         viewModel.countOfShowingCards
+    }
+    
+    var countOfNotASet: Int {
+        viewModel.countOfNotASet
     }
     
     var isSetSelected: Bool {
         viewModel.isSetSelected
     }
     
-    var isSetMatched: Bool {
-        viewModel.checkSet()
+    var allCardsAreOnTheDesk: Bool {
+        viewModel.showingCards.count + viewModel.countOfGettedSets * 3 == viewModel.cards.count
+    }
+    
+    var isGameOver: Bool {
+        allCardsAreOnTheDesk && checkGameOver()
+    }
+    
+    func flipTheCards() {
+        viewModel.flipTheCards()
+    }
+    
+    func checkGameOver() -> Bool {
+        return viewModel.checkGameOver()
+    }
+    
+    func removeSelection() {
+        viewModel.removeSelection()
+    }
+    
+    func deleteCards() {
+        viewModel.deleteCards()
     }
     
     func addCards() {
@@ -39,7 +71,12 @@ class SetGame: ObservableObject {
     }
     
     init() {
+        viewModel = Model()
         viewModel.makeArray()
-        viewModel.shuffle()
+    }
+    
+    func startNewGame() {
+        viewModel = Model()
+        viewModel.makeArray()
     }
 }

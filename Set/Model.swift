@@ -7,26 +7,30 @@
 
 import Foundation
  
-let startCountOfCards = 16
+let startCountOfCards = 12
+let countOfFullDeck = 81
 
 struct Model {
     var cards: [Card]
     var showingCards: [Card]
+    var discardPile: [Card]
     
     var countOfShowingCards: Int
     
     var indicesOfSet: [Int]
+    
     var countOfGettedSets: Int
+    var countOfNotASet: Int
     
     var isSetSelected: Bool {
         get {
             var count = 0
-            cards.indices.forEach {if cards[$0].isSelected { count += 1 }}
+            showingCards.indices.forEach {if showingCards[$0].isSelected { count += 1 }}
             return count == 3 ? true : false
         }
     }
     
-    struct Card: Identifiable {
+    struct Card: Identifiable, Equatable {
         var number: Options.Numbers
         var shape: Options.Shapes
         var shading: Options.Shadings
@@ -34,6 +38,7 @@ struct Model {
         
         var isSelected: Bool = false
         var isMatched: Bool = false
+        var isFacedUp: Bool = false
         
         var debugDescription: String {
             return "number: \(number)\(number.rawValue), shape: \(shape)\(shape.rawValue), shading: \(shading)\(shading.rawValue), color: \(color)\(color.rawValue)"
@@ -51,90 +56,112 @@ struct Model {
         }
         
         var id: UUID
+        
+        mutating func clearSelection() {
+            isMatched = false
+            isSelected = false
+        }
     }
     
     init() {
         cards = []
         showingCards = []
+        discardPile = []
         indicesOfSet = []
         countOfShowingCards = startCountOfCards
         countOfGettedSets = 0
+        countOfNotASet = 0
     }
     
-    mutating func addCards() {
-        countOfShowingCards += 3
+    mutating func flipTheCards() {
+        showingCards.indices.forEach { showingCards[$0].isFacedUp = true }
+    }
+    
+    func printCards() {
+        showingCards.forEach {card in
+            print(card.debugDescription)
+        }
     }
     
     mutating func chooseCard(_ card: Card) {
-        //print("\(card.debugDescription)")
-        
-        print(indicesOfSet)
-        if let chosenIndex = cards.firstIndex(where: { $0.id == card.id }) {
+        if let chosenIndex = showingCards.firstIndex(where: { $0.id == card.id }) {
             
-            cards[chosenIndex].isSelected.toggle()
+            showingCards[chosenIndex].isSelected.toggle()
             
-            cards[chosenIndex].isSelected ? indicesOfSet.append(chosenIndex) : indicesOfSet.removeAll(where: { $0 == chosenIndex} )
+            showingCards[chosenIndex].isSelected ? indicesOfSet.append(chosenIndex) : indicesOfSet.removeAll(where: { $0 == chosenIndex} )
             
             if isSetSelected {
-                if checkSet() {
-                    indicesOfSet.indices.forEach { cards[indicesOfSet[$0]].isMatched = true
-                        cards[indicesOfSet[$0]].isSelected = false
-                        countOfGettedSets += 1
+                if checkSet(at: indicesOfSet[0], indicesOfSet[1], indicesOfSet[2]) {
+                    indicesOfSet.indices.forEach { showingCards[indicesOfSet[$0]].isMatched = true
+                        showingCards[indicesOfSet[$0]].isSelected = false
                     }
-                    
-                    indicesOfSet.removeAll()
+                    countOfGettedSets += 1
+                } else {
+                    countOfNotASet += 1
                 }
-                print("Res \(indicesOfSet)")
             }
             
         }
-        
-        print(indicesOfSet)
-    
     }
     
-    func checkSet() -> Bool {
-        let card1 = cards[indicesOfSet[0]]
-        let card2 = cards[indicesOfSet[1]]
-        let card3 = cards[indicesOfSet[2]]
+    mutating func removeSelection() {
+        indicesOfSet.indices.forEach {
+            showingCards[indicesOfSet[$0]].isSelected = false
+        }
+        indicesOfSet.removeAll()
+    }
+    
+    mutating func addCards() {
+        for i in 0 ..< 3 {
+            showingCards.append(cards[countOfShowingCards + i])
+        }
+        countOfShowingCards += 3
+    }
+    
+    mutating func deleteCards() {
+            indicesOfSet.sort(by: {$0 > $1})
+            for i in 0 ..< indicesOfSet.count {
+                var card = showingCards[indicesOfSet[i]]
+                card.clearSelection()
+                discardPile.append(card)
+                
+                showingCards.remove(at: indicesOfSet[i])
+            }
+            indicesOfSet.removeAll()
+    }
+    
+    func checkGameOver() -> Bool {
+        var isGameOver = true
         
-        //for debugging
-        print(card1.debugDescription)
-        print(card2.debugDescription)
-        print(card3.debugDescription)
-        
-        let color = allSameOrDifferent(card1.color, card2.color, card3.color)
-        
-        print("Color: \(color)")
-        
-        let number = allSameOrDifferent(card1.number, card2.number, card3.number)
-        print("Number: \(number)")
-        
-        let shading = allSameOrDifferent(card1.shading, card2.shading, card3.shading)
-        print("Shading: \(shading)")
-        
-        let shape = allSameOrDifferent(card1.shape, card2.shape, card3.shape)
-        print("Shape: \(shape)")
-         
-        return color && number && shading && shape
-        
-        //for app
-       /* return allSameOrDifferent(card1.color, card2.color, card3.color)
+        for i in 0 ..< showingCards.count {
+            for j in i + 1 ..< showingCards.count {
+                for k in j + 1 ..< showingCards.count {
+                    if checkSet(at: i, j, k) {
+                        isGameOver = false
+                        print(i, j, k)
+                        return isGameOver
+                    }
+                }
+            }
+        }
+        return isGameOver
+    }
+    
+    
+    func checkSet(at i: Int, _ j: Int, _ k: Int) -> Bool {
+        let card1 = showingCards[i]
+        let card2 = showingCards[j]
+        let card3 = showingCards[k]
+     
+        return allSameOrDifferent(card1.color, card2.color, card3.color)
         && allSameOrDifferent(card1.number, card2.number, card3.number)
         && allSameOrDifferent(card1.shading, card2.shading, card3.shading)
-        && allSameOrDifferent(card1.shape, card2.shape, card3.shape)*/
+        && allSameOrDifferent(card1.shape, card2.shape, card3.shape)
     }
     
     func allSameOrDifferent<T: CaseIterable & RawRepresentable>(_ card1: T, _ card2: T, _ card3: T) -> Bool where T.RawValue == Int {
-   
-        //for debugging
-        print("result: \(card1.rawValue) + \(card2.rawValue) + \(card3.rawValue)")
         
         return (card1.rawValue + card2.rawValue + card3.rawValue) % 3 == 0
-    }
-    
-    mutating func shuffle() {
-        cards.shuffle()
     }
     
     mutating func makeArray() {
@@ -146,6 +173,14 @@ struct Model {
             
             if shape != nil && color != nil && number != nil && shading != nil{
                 cards.append(Card(number: number!, shape: shape!, shading: shading!, color: color!, id: UUID()))
+            }
+        }
+        
+        cards.shuffle()
+        
+        cards.indices.forEach { index in
+            if index < startCountOfCards {
+                    showingCards.append(cards[index])
             }
         }
     }
@@ -192,11 +227,3 @@ extension Int {
     var binaryString: String { return String(self, radix: 2) }
 }
 
-//extension Bool {
-//    static func ^^(lhs:Bool, rhs:Bool) -> Bool {
-//        if (lhs && !rhs) || (!lhs && rhs) {
-//            return true
-//        }
-//        return false
-//    }
-//}
